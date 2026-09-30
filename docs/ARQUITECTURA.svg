@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1920" viewBox="0 0 1600 1920" role="img" aria-labelledby="title desc">
+<title id="title">BridgeLytic: arquitectura y flujo gobernado</title><desc id="desc">Capas independientes, validación, propuesta trazable, decisión humana, rechazo auditable y acciones externas siempre bloqueadas.</desc>
+<defs><marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 0 L16 8 L0 16 Z" fill="#9fd5ce"/></marker><marker id="no" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto"><path d="M0 0 L16 8 L0 16 Z" fill="#ff9e80"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#e9f5f2}.heading{font-size:34px;font-weight:700}.sub{font-size:21px;fill:#b5cbc8}.title{font-size:24px;font-weight:700}.line{font-size:19px;fill:#c1d6d2}.label{font-size:19px;font-weight:700;fill:#b4f27c}.negative{fill:#ffad92}rect{stroke-width:2}.edge{fill:none;stroke:#9fd5ce;stroke-width:3;marker-end:url(#arrow)}.fail{stroke:#ff9e80;marker-end:url(#no)}</style>
+<rect width="1600" height="1920" fill="#09171b" stroke="none"/>
+<text x="60" y="64" class="heading">BridgeLytic Opportunity Control Layer</text><text x="60" y="105" class="sub">Arquitectura local y recorrido de decisión · ningún camino ejecuta acciones externas</text>
+<text x="60" y="164" class="label">A / RESPONSABILIDADES Y DEPENDENCIAS</text>
+<rect x="60" y="195" width="290" height="118" rx="14" fill="#142a30" stroke="#355960"/><text x="205" y="230" text-anchor="middle" class="title">INTERFAZ WEB</text>
+<text x="205" y="263" text-anchor="middle" class="line">Expediente, brief y formularios</text>
+<text x="205" y="289" text-anchor="middle" class="line">Señal → propuesta → next</text>
+<rect x="450" y="195" width="290" height="118" rx="14" fill="#142a30" stroke="#355960"/><text x="595" y="230" text-anchor="middle" class="title">API HTTP</text>
+<text x="595" y="263" text-anchor="middle" class="line">JSON y errores HTTP</text>
+<text x="595" y="289" text-anchor="middle" class="line">Token → identidad y permisos</text>
+<rect x="840" y="195" width="290" height="118" rx="14" fill="#142a30" stroke="#b4f27c"/><text x="985" y="230" text-anchor="middle" class="title">APLICACIÓN</text>
+<text x="985" y="263" text-anchor="middle" class="line">Casos de uso y transacciones</text>
+<text x="985" y="289" text-anchor="middle" class="line">Valida, persiste y audita</text>
+<rect x="1230" y="195" width="310" height="118" rx="14" fill="#142a30" stroke="#b4f27c"/><text x="1385" y="230" text-anchor="middle" class="title">DOMINIO</text>
+<text x="1385" y="263" text-anchor="middle" class="line">Entidades y reglas puras</text>
+<text x="1385" y="289" text-anchor="middle" class="line">Etapas y aprobación</text>
+<path d="M350 254 H438" class="edge"/>
+<text x="370" y="236" class="label">JSON</text>
+<path d="M740 254 H828" class="edge"/>
+<text x="748" y="236" class="label">comando</text>
+<path d="M1130 254 H1218" class="edge"/>
+<text x="1150" y="236" class="label">valida</text>
+<rect x="450" y="385" width="290" height="115" rx="14" fill="#142a30" stroke="#48c6b5"/><text x="595" y="420" text-anchor="middle" class="title">BORRADOR LOCAL</text>
+<text x="595" y="453" text-anchor="middle" class="line">Determinista, sin LLM</text>
+<text x="595" y="479" text-anchor="middle" class="line">Sólo salida para revisión</text>
+<rect x="840" y="385" width="290" height="115" rx="14" fill="#142a30" stroke="#355960"/><text x="985" y="420" text-anchor="middle" class="title">REPOSITORIO</text>
+<text x="985" y="453" text-anchor="middle" class="line">Implementa el puerto</text>
+<text x="985" y="479" text-anchor="middle" class="line">SQL y serialización</text>
+<rect x="1230" y="385" width="310" height="115" rx="14" fill="#142a30" stroke="#355960"/><text x="1385" y="420" text-anchor="middle" class="title">SQLITE</text>
+<text x="1385" y="453" text-anchor="middle" class="line">Expediente + historial</text>
+<text x="1385" y="479" text-anchor="middle" class="line">Commit / rollback atómicos</text>
+<path d="M595 313 V373" class="edge"/>
+<text x="612" y="352" class="label">solicita</text>
+<path d="M985 313 V373" class="edge"/>
+<text x="1002" y="352" class="label">puerto</text>
+<path d="M1130 441 H1218" class="edge"/>
+<text x="1146" y="425" class="label">guarda</text>
+<text x="60" y="548" class="sub">Domain no importa SQL, HTTP ni IA. Lectura local sin token; edición con clave; decisión final sólo con clave de revisor.</text>
+<path d="M60 582 H1540" stroke="#355960"/><text x="60" y="624" class="label">B / FLUJO OPERATIVO Y RAMAS DE CONTROL</text>
+<rect x="590" y="660" width="420" height="115" rx="14" fill="#142a30" stroke="#355960"/><text x="800" y="695" text-anchor="middle" class="title">1 · INTAKE → EVIDENCE_REVIEW</text>
+<text x="800" y="728" text-anchor="middle" class="line">Fuente, procedencia y confianza</text>
+<text x="800" y="754" text-anchor="middle" class="line">Evidencia ≠ hipótesis ≠ incógnita</text>
+<path d="M800 775 V817" class="edge"/>
+<text x="824" y="801" class="label">evaluar</text>
+<path d="M800 825 L990 890 L800 955 L610 890 Z" fill="#293021" stroke="#eaca68" stroke-width="2"/><text x="800" y="885" text-anchor="middle" class="title">¿HAY EVIDENCIA?</text><text x="800" y="915" text-anchor="middle" class="line">≥ 1 con fuente</text>
+<path d="M990 890 H1188" class="edge fail"/>
+<text x="1070" y="874" class="label negative">NO</text>
+<rect x="1200" y="830" width="340" height="135" rx="14" fill="#35221e" stroke="#ff9e80"/><text x="1370" y="865" text-anchor="middle" class="title">NO AVANZA</text>
+<text x="1370" y="898" text-anchor="middle" class="line">Error 422; etapa sin cambio</text>
+<text x="1370" y="924" text-anchor="middle" class="line">Agregar información y reintentar</text>
+<text x="1370" y="950" text-anchor="middle" class="line">Rechazo en auditoría</text>
+<path d="M800 955 V1007" class="edge"/>
+<text x="824" y="992" class="label">SÍ</text>
+<rect x="590" y="1020" width="420" height="115" rx="14" fill="#142a30" stroke="#355960"/><text x="800" y="1055" text-anchor="middle" class="title">2 · OPTIONS_READY</text>
+<text x="800" y="1088" text-anchor="middle" class="line">Comparar 2–3 alternativas</text>
+<text x="800" y="1114" text-anchor="middle" class="line">Guardar propuesta con referencias</text>
+<path d="M800 1135 V1177" class="edge"/>
+<text x="824" y="1166" class="label">revisar</text>
+<path d="M800 1185 L990 1250 L800 1315 L610 1250 Z" fill="#293021" stroke="#eaca68" stroke-width="2"/><text x="800" y="1245" text-anchor="middle" class="title">¿2–3 OPCIONES?</text><text x="800" y="1275" text-anchor="middle" class="line">y propuesta trazable</text>
+<path d="M610 1250 H412" class="edge fail"/>
+<text x="505" y="1235" class="label negative">NO</text>
+<rect x="60" y="1190" width="340" height="135" rx="14" fill="#35221e" stroke="#ff9e80"/><text x="230" y="1225" text-anchor="middle" class="title">COMPLETAR PROPUESTA</text>
+<text x="230" y="1258" text-anchor="middle" class="line">Error 422; conservar etapa</text>
+<text x="230" y="1284" text-anchor="middle" class="line">Agregar alternativas o propuesta</text>
+<text x="230" y="1310" text-anchor="middle" class="line">Volver a solicitar transición</text>
+<path d="M800 1315 V1367" class="edge"/>
+<text x="824" y="1353" class="label">SÍ</text>
+<rect x="590" y="1380" width="420" height="115" rx="14" fill="#142a30" stroke="#355960"/><text x="800" y="1415" text-anchor="middle" class="title">3 · PENDING_APPROVAL</text>
+<text x="800" y="1448" text-anchor="middle" class="line">Expediente congelado para revisión</text>
+<text x="800" y="1474" text-anchor="middle" class="line">Revisor elige opción + motivo</text>
+<path d="M800 1495 V1537" class="edge"/>
+<text x="824" y="1524" class="label">confirmar</text>
+<path d="M800 1545 L990 1610 L800 1675 L610 1610 Z" fill="#293021" stroke="#eaca68" stroke-width="2"/><text x="800" y="1605" text-anchor="middle" class="title">¿CONFIRMACIÓN?</text><text x="800" y="1635" text-anchor="middle" class="line">Revisor + opción válida</text>
+<path d="M990 1610 H1188" class="edge fail"/>
+<text x="1070" y="1594" class="label negative">NO</text>
+<rect x="1200" y="1535" width="340" height="165" rx="14" fill="#35221e" stroke="#ff9e80"/><text x="1370" y="1570" text-anchor="middle" class="title">SIN APROBACIÓN</text>
+<text x="1370" y="1603" text-anchor="middle" class="line">Sin permiso: 401 / 403</text>
+<text x="1370" y="1629" text-anchor="middle" class="line">Datos inválidos: 400 / 422</text>
+<text x="1370" y="1655" text-anchor="middle" class="line">Puede pausar o rechazar</text>
+<text x="1370" y="1681" text-anchor="middle" class="line">Toda escritura válida se audita</text>
+<path d="M800 1675 V1727" class="edge"/>
+<text x="824" y="1713" class="label">SÍ</text>
+<rect x="590" y="1740" width="420" height="120" rx="14" fill="#142a30" stroke="#b4f27c"/><text x="800" y="1775" text-anchor="middle" class="title">4 · APPROVED</text>
+<text x="800" y="1808" text-anchor="middle" class="line">Decisión + aprobación + evento</text>
+<text x="800" y="1834" text-anchor="middle" class="line">Next action: sólo simulación local</text>
+<rect x="60" y="1440" width="340" height="160" rx="14" fill="#142a30" stroke="#355960"/><text x="230" y="1475" text-anchor="middle" class="title">PAUSA Y CORRECCIÓN</text>
+<text x="230" y="1508" text-anchor="middle" class="line">Desde revisión, opciones o gate</text>
+<text x="230" y="1534" text-anchor="middle" class="line">PAUSED → EVIDENCE_REVIEW</text>
+<text x="230" y="1560" text-anchor="middle" class="line">Permite nueva evidencia/propuesta</text>
+<text x="230" y="1586" text-anchor="middle" class="line">REJECTED es un cierre final</text>
+<rect x="60" y="1685" width="340" height="175" rx="14" fill="#142a30" stroke="#48c6b5"/><text x="230" y="1720" text-anchor="middle" class="title">HISTORIAL APPEND-ONLY</text>
+<text x="230" y="1753" text-anchor="middle" class="line">Actor · fecha · objeto · resultado</text>
+<text x="230" y="1779" text-anchor="middle" class="line">Cambio + evento: una transacción</text>
+<text x="230" y="1805" text-anchor="middle" class="line">Falla: rollback sin cambio parcial</text>
+<text x="230" y="1831" text-anchor="middle" class="line">UPDATE / DELETE bloqueados</text>
+<rect x="1200" y="1740" width="340" height="120" rx="14" fill="#35221e" stroke="#ff9e80"/><text x="1370" y="1775" text-anchor="middle" class="title">ACCIÓN EXTERNA</text>
+<text x="1370" y="1808" text-anchor="middle" class="line">SIEMPRE HTTP 403 + auditoría</text>
+<text x="1370" y="1834" text-anchor="middle" class="line">Incluso después de APPROVED</text>
+<path d="M1010 1800 H1188" class="edge fail"/>
+<text x="1031" y="1782" class="label negative">BLOQUEADA</text>
+<text x="60" y="1900" class="line">Alcance: sandbox de un proceso. El administrador del archivo SQLite conserva control; no hay garantía antifraude criptográfica.</text></svg>

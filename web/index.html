@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BridgeLytic · Opportunity Control Layer</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">BRIDGELYTIC / PRODUCT OS</p>
+        <h1>Opportunity Control Layer</h1>
+        <p>De una señal a una decisión explicable.</p>
+      </div>
+      <div class="safety">
+        <span class="pill">Acciones externas bloqueadas</span
+        ><span class="pill muted">Sandbox local · datos de prueba</span>
+      </div>
+    </header>
+    <section class="session-bar" aria-label="Permisos de sesión">
+      <div>
+        <strong id="session-label">Lectura local</strong
+        ><small>La identidad se establece en el servidor.</small>
+      </div>
+      <form id="session-form">
+        <label
+          >Clave de sesión local<input
+            id="session-key"
+            type="password"
+            autocomplete="off"
+            placeholder="Clave de editor o revisor de la terminal" /></label
+        ><button>Activar permisos</button>
+      </form>
+    </section>
+    <div id="notice" role="status" aria-live="polite">
+      Cargando datos locales…
+    </div>
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="section-heading">
+          <h2>Portafolio</h2>
+          <button id="refresh-button" aria-label="Actualizar portafolio">
+            ↻
+          </button>
+        </div>
+        <div id="opportunity-list"></div>
+        <details>
+          <summary>Nueva oportunidad</summary>
+          <form
+            id="create-form"
+            data-global="true"
+            data-endpoint="opportunities"
+          >
+            <label
+              >ID de cuenta<input
+                name="account_id"
+                required
+                placeholder="ACCOUNT-LOCAL-004" /></label
+            ><label>Cuenta<input name="account_name" required /></label
+            ><label>Oportunidad / problema<input name="title" required /></label
+            ><label>Responsable interno<input name="owner" required /></label
+            ><button class="primary">Crear en intake</button>
+          </form>
+        </details>
+        <p class="fine-print">
+          Los tres casos iniciales son fixtures, no información comercial
+          verificada. No se contacta a ninguna organización.
+        </p>
+      </aside>
+      <div class="content" id="opportunity-view" hidden>
+        <section class="hero panel">
+          <div>
+            <p class="eyebrow" id="account-name"></p>
+            <h2 id="opportunity-title"></h2>
+            <p id="opportunity-owner"></p>
+          </div>
+          <div>
+            <span id="stage-badge" class="pill accent"></span>
+            <p id="last-movement" class="muted"></p>
+            <button id="export-button">Descargar brief JSON</button>
+          </div>
+        </section>
+        <nav
+          id="workflow"
+          class="workflow"
+          aria-label="Recorrido de la oportunidad"
+        ></nav>
+        <section class="panel next-panel">
+          <div>
+            <p class="eyebrow">QUÉ SIGUE</p>
+            <h3 id="next-step"></h3>
+            <p id="next-requirement"></p>
+          </div>
+          <form id="transition-form">
+            <label
+              >Transición disponible<select
+                name="next_stage"
+                id="next-stage"
+              ></select></label
+            ><label
+              >Motivo (obligatorio al rechazar)<input
+                name="rationale"
+                placeholder="Razón del cambio o pausa" /></label
+            ><button class="primary">Solicitar cambio de etapa</button>
+          </form>
+          <div id="transition-complete" hidden>
+            <h3 id="transition-complete-title"></h3>
+            <p id="transition-complete-detail"></p>
+            <a id="transition-complete-link" href="#next-actions">
+              Ir a las siguientes acciones internas →
+            </a>
+          </div>
+        </section>
+        <section id="intake" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">01 / INTAKE</p>
+              <h2>Señales y responsables</h2>
+            </div>
+          </div>
+          <p>Una señal inicia una investigación; no prueba un hecho.</p>
+          <div class="two-column">
+            <article class="panel">
+              <h3>Movimientos observados</h3>
+              <div id="signal-list"></div>
+              <details>
+                <summary>Registrar señal</summary>
+                <form data-endpoint="signals">
+                  <label
+                    >Movimiento observado<input name="title" required /></label
+                  ><label
+                    >Fecha observada<input
+                      name="observed_at"
+                      type="date"
+                      required /></label
+                  ><label>Fuente<input name="source" required /></label
+                  ><label
+                    >Procedencia / cómo se obtuvo<textarea
+                      name="provenance"
+                      required
+                    ></textarea></label
+                  ><button class="primary">Guardar señal</button>
+                </form>
+              </details>
+            </article>
+            <article class="panel">
+              <h3>Contactos / roles sanitizados</h3>
+              <div id="contact-list"></div>
+              <details>
+                <summary>Registrar un rol</summary>
+                <form data-endpoint="contacts">
+                  <label>Rol<input name="role" required /></label
+                  ><label
+                    >Nombre sanitizado<input
+                      name="display_name"
+                      required /></label
+                  ><button>Guardar referencia interna</button>
+                </form>
+              </details>
+              <p class="muted">
+                No hay campo de email ni herramientas de contacto.
+              </p>
+            </article>
+          </div>
+        </section>
+        <section id="knowledge" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">02 / EVIDENCIA Y LÍMITES</p>
+              <h2>Qué sabemos y qué falta</h2>
+            </div>
+            <span id="confidence-badge" class="muted"></span>
+          </div>
+          <div class="three-column">
+            <article class="panel">
+              <h3>Evidencia con fuente</h3>
+              <div id="evidence-list"></div>
+              <details>
+                <summary>Agregar evidencia</summary>
+                <form data-endpoint="evidence">
+                  <label
+                    >Afirmación<textarea
+                      name="statement"
+                      required
+                    ></textarea></label
+                  ><label>Fuente<input name="source" required /></label
+                  ><label
+                    >Procedencia<textarea
+                      name="provenance"
+                      required
+                    ></textarea></label
+                  ><label
+                    >Estado<select name="confidence_state">
+                      <option value="UNKNOWN">UNKNOWN · sin verificar</option>
+                      <option value="INFERRED">INFERRED · inferida</option>
+                      <option value="VERIFIED">
+                        VERIFIED · revisada contra la fuente
+                      </option>
+                    </select></label
+                  ><label
+                    >Confianza (0–1)<input
+                      name="confidence"
+                      type="number"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value="0"
+                      required /></label
+                  ><button class="primary">Registrar evidencia</button>
+                </form>
+              </details>
+            </article>
+            <article class="panel">
+              <h3>Hipótesis · INFERRED</h3>
+              <div id="hypothesis-list"></div>
+              <details>
+                <summary>Agregar hipótesis</summary>
+                <form data-endpoint="hypotheses">
+                  <label
+                    >Hipótesis<textarea
+                      name="statement"
+                      required
+                    ></textarea></label
+                  ><label
+                    >Fundamento<textarea
+                      name="rationale"
+                      required
+                    ></textarea></label
+                  ><label
+                    >Confianza (0–1)<input
+                      name="confidence"
+                      type="number"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value="0.5"
+                      required /></label
+                  ><button>Guardar hipótesis</button>
+                </form>
+              </details>
+            </article>
+            <article class="panel">
+              <h3>Incógnitas · UNKNOWN</h3>
+              <div id="unknown-list"></div>
+              <details>
+                <summary>Agregar incógnita</summary>
+                <form data-endpoint="unknowns">
+                  <label
+                    >Pregunta pendiente<textarea
+                      name="question"
+                      required
+                    ></textarea></label
+                  ><button>Guardar pregunta</button>
+                </form>
+              </details>
+            </article>
+          </div>
+        </section>
+        <section id="proposals" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">03 / ALTERNATIVAS Y PROPUESTA</p>
+              <h2>Qué podríamos decidir</h2>
+            </div>
+            <span class="muted">2–3 opciones · razón y riesgo visibles</span>
+          </div>
+          <div class="two-column">
+            <article class="panel">
+              <h3>Alternativas</h3>
+              <div id="option-list"></div>
+              <details>
+                <summary>Agregar alternativa (máximo 3)</summary>
+                <form data-endpoint="options">
+                  <label>Título<input name="title" required /></label
+                  ><label
+                    >Razón para considerarla<textarea
+                      name="rationale"
+                      required
+                    ></textarea></label
+                  ><label
+                    >Riesgo<textarea name="risk" required></textarea></label
+                  ><button>Guardar alternativa</button>
+                </form>
+              </details>
+            </article>
+            <article class="panel">
+              <h3>Propuesta trazable</h3>
+              <div id="proposal-result"></div>
+              <details>
+                <summary>Redactar / versionar propuesta</summary>
+                <form id="proposal-form" data-endpoint="proposals">
+                  <label
+                    >Opción recomendada<select
+                      name="option_id"
+                      class="option-select"
+                      required
+                    ></select></label
+                  ><label
+                    >Por qué esta opción<textarea
+                      name="rationale"
+                      required
+                    ></textarea>
+                  </label>
+                  <fieldset>
+                    <legend>Evidencias de respaldo (al menos una)</legend>
+                    <div id="evidence-references"></div>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Hipótesis asumidas</legend>
+                    <div id="hypothesis-references"></div>
+                  </fieldset>
+                  <fieldset>
+                    <legend>Incógnitas reconocidas</legend>
+                    <div id="unknown-references"></div>
+                  </fieldset>
+                  <button class="primary">
+                    Guardar propuesta para revisión
+                  </button>
+                </form>
+              </details>
+            </article>
+          </div>
+          <details class="panel ai-panel">
+            <summary>Borrador asistido local · sin LLM ni red</summary>
+            <p>
+              Simulador determinista de información existente. No verifica
+              fuentes ni evalúa viabilidad. La primera opción por ID no es un
+              ranking.
+            </p>
+            <button id="ai-button">Generar borrador revisable</button>
+            <div id="ai-result"></div>
+          </details>
+        </section>
+        <section id="decision" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">04 / PUERTA HUMANA</p>
+              <h2>Decisión y aprobación explícita</h2>
+            </div>
+            <span class="pill">Sólo revisor</span>
+          </div>
+          <div class="two-column">
+            <article class="panel">
+              <h3>Decisión registrada</h3>
+              <div id="decision-result"></div>
+              <p class="muted">
+                La persona puede elegir una opción diferente a la propuesta. Su
+                motivo quedará registrado.
+              </p>
+            </article>
+            <form id="decision-form" class="panel">
+              <p>
+                Disponible sólo en PENDING_APPROVAL. Revise fuentes, supuestos y
+                riesgos antes de confirmar.
+              </p>
+              <label
+                >Versión de propuesta<input
+                  id="decision-proposal"
+                  name="proposal_id"
+                  readonly
+                  required /></label
+              ><label
+                >Opción elegida<select
+                  name="option_id"
+                  class="option-select"
+                  required
+                ></select></label
+              ><label
+                >Motivo de la decisión<textarea
+                  name="rationale"
+                  required
+                ></textarea></label
+              ><label class="check"
+                ><input type="checkbox" name="confirmed" required />He revisado
+                evidencia, supuestos y riesgos. Apruebo únicamente esta decisión
+                interna.</label
+              ><button class="primary">Confirmar decisión humana</button>
+            </form>
+          </div>
+        </section>
+        <section id="next-actions" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">05 / SEGUIMIENTO</p>
+              <h2>Siguiente acción, responsable y fecha</h2>
+            </div>
+          </div>
+          <div class="two-column">
+            <article class="panel">
+              <div id="action-list"></div>
+              <details>
+                <summary>Planear siguiente acción interna</summary>
+                <form data-endpoint="next-actions">
+                  <label
+                    >Descripción<textarea
+                      name="description"
+                      required
+                    ></textarea></label
+                  ><label>Responsable<input name="owner" required /></label
+                  ><label
+                    >Fecha límite<input
+                      name="due_date"
+                      type="date"
+                      required /></label
+                  ><button>Guardar next action</button>
+                </form>
+              </details>
+            </article>
+            <article class="panel danger">
+              <h3>Una aprobación no concede ejecución externa</h3>
+              <p>
+                Sin correo, CRM, outbound, compras ni calendario. Simular sólo
+                cambia un estado local.
+              </p>
+              <button id="external-action-button">
+                Comprobar bloqueo externo
+              </button>
+              <p>
+                Resultado esperado: HTTP 403 y evento REJECTED, incluso después
+                de aprobar. Este control no intenta contactar ningún sistema.
+              </p>
+            </article>
+          </div>
+        </section>
+        <section id="audit" class="section panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">06 / MEMORIA OPERATIVA</p>
+              <h2>Auditoría append-only</h2>
+            </div>
+            <span id="event-count"></span>
+          </div>
+          <p class="muted">
+            Quién · qué intentó · cuándo · resultado. Los rechazos no cambian la
+            etapa.
+          </p>
+          <div id="audit-list"></div>
+        </section>
+      </div>
+    </main>
+    <footer>
+      Evaluación local · ninguna capacidad productiva habilitada · datos
+      sanitizados reales pendientes
+    </footer>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+[project]
+name = "bridgelytic-opportunity-control-layer"
+version = "0.1.0"
+description = "Controlled evidence-to-decision workflow with human approval and append-only auditability"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+opportunity-control = "opportunity_control.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BridgeLytic · Evidence-to-Decision Vertical Slice</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #081319;
+        color: #eef5f3;
+        font:
+          22px/1.5 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 1280px;
+        margin: auto;
+      }
+      .slide {
+        min-height: 720px;
+        padding: 66px 76px;
+        border-bottom: 1px solid #38535a;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+        background: linear-gradient(135deg, #0c2029, #09171b);
+      }
+      .kicker {
+        color: #7ddbc4;
+        font-size: 14px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      h1 {
+        font-size: 62px;
+        line-height: 1.08;
+        letter-spacing: -2px;
+        max-width: 950px;
+        margin: 0;
+      }
+      h2 {
+        font-size: 43px;
+        line-height: 1.15;
+        margin: 0;
+      }
+      h3 {
+        font-size: 24px;
+        margin: 0 0 12px;
+      }
+      p {
+        margin: 0;
+      }
+      .lead {
+        font-size: 26px;
+        color: #c2d6d6;
+        max-width: 950px;
+      }
+      .accent {
+        color: #b4f27c;
+      }
+      .muted {
+        color: #aac1c7;
+        font-size: 17px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+      }
+      .two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .card {
+        border: 1px solid #426169;
+        border-radius: 14px;
+        padding: 24px;
+        background: #132930;
+      }
+      .card p {
+        font-size: 19px;
+      }
+      .card small {
+        color: #b8cdd0;
+        font-size: 16px;
+        display: block;
+        margin-top: 14px;
+      }
+      .flow {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .flow span {
+        border: 1px solid #72a493;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 19px;
+      }
+      .flow b {
+        color: #b4f27c;
+      }
+      .foot {
+        font-size: 13px;
+        color: #9bb7bf;
+        position: absolute;
+        bottom: 26px;
+        left: 76px;
+        right: 76px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .note {
+        border-left: 4px solid #b4f27c;
+        padding: 12px 22px;
+        color: #d7e9e4;
+        font-size: 20px;
+      }
+      a {
+        color: #7ddbc4;
+      }
+      ul {
+        margin: 0;
+        padding-left: 25px;
+      }
+      li {
+        margin: 10px 0;
+      }
+      code {
+        font-size: 17px;
+        color: #b4f27c;
+        overflow-wrap: anywhere;
+      }
+      .badge {
+        font-size: 14px;
+        display: inline-block;
+        border: 1px solid #426169;
+        border-radius: 30px;
+        padding: 7px 15px;
+        color: #b4f27c;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 15px;
+        font-size: 22px;
+      }
+      .steps b {
+        color: #b4f27c;
+      }
+      .steps p {
+        margin: 0;
+      }
+      .topnav {
+        padding: 14px;
+        text-align: center;
+        font-size: 14px;
+      }
+      .topnav button {
+        background: #b4f27c;
+        border: 0;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .diagram {
+        display: grid;
+        grid-template-columns: 1fr 35px 1fr 35px 1fr;
+        align-items: center;
+        gap: 15px;
+      }
+      .diagram .card {
+        text-align: center;
+      }
+      .diagram b {
+        text-align: center;
+        color: #b4f27c;
+      }
+      .diagram small {
+        font-size: 16px;
+      }
+      @media (max-width: 800px) {
+        body {
+          font-size: 18px;
+        }
+        .slide {
+          padding: 40px 25px 75px;
+          min-height: 90vh;
+        }
+        h1 {
+          font-size: 40px;
+        }
+        h2 {
+          font-size: 32px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .foot {
+          left: 25px;
+          right: 25px;
+        }
+        .diagram {
+          grid-template-columns: 1fr;
+        }
+        .lead {
+          font-size: 21px;
+        }
+      }
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+      @media print {
+        .topnav {
+          display: none;
+        }
+        main {
+          max-width: none;
+        }
+        .slide {
+          width: 297mm;
+          height: 210mm;
+          min-height: 0;
+          padding: 16mm 19mm;
+          break-after: page;
+          page-break-after: always;
+          overflow: hidden;
+        }
+        .slide:last-child {
+          break-after: auto;
+          page-break-after: auto;
+        }
+        body {
+          font-size: 18px;
+        }
+        h1 {
+          font-size: 55px;
+        }
+        h2 {
+          font-size: 37px;
+        }
+        .lead {
+          font-size: 23px;
+        }
+        .foot {
+          left: 19mm;
+          right: 19mm;
+          bottom: 8mm;
+        }
+        .card {
+          padding: 20px;
+        }
+        .card p {
+          font-size: 17px;
+        }
+        .note {
+          font-size: 18px;
+        }
+        .steps {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topnav">
+      Presentación ejecutiva · versión local para revisión ·
+      <button onclick="window.print()">Imprimir / guardar PDF</button>
+    </nav>
+    <main>
+      <section class="slide">
+        <p class="kicker">BRIDGELYTIC / PRODUCT OS</p>
+        <h1>
+          De evidencia a decisión.<br /><span class="accent"
+            >Con control humano.</span
+          >
+        </h1>
+        <p class="lead">
+          Opportunity Control Layer · vertical slice funcional para revisar
+          señales, comparar alternativas y registrar decisiones auditables.
+        </p>
+        <p>
+          <span class="badge">Datos sintéticos</span>
+          <span class="badge">Sin acciones externas</span>
+          <span class="badge">Sin LLM conectado</span>
+        </p>
+        <div class="foot">
+          <span>Angel Isaac Sánchez Estrada · septiembre 2026</span
+          ><span>01 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">EL PROBLEMA OPERATIVO</p>
+        <h2>¿Por qué avanzar, quién lo decidió<br />y qué sigue?</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Información separada</h3>
+            <p>
+              Evidencia con fuente y procedencia. Hipótesis e incógnitas no se
+              convierten en hechos.
+            </p>
+            <small>VERIFIED / INFERRED / UNKNOWN</small>
+          </article>
+          <article class="card">
+            <h3>Decisión explicable</h3>
+            <p>
+              2–3 alternativas con razón y riesgo. Propuesta enlazada a sus
+              fuentes y supuestos.
+            </p>
+            <small>Versiones conservadas</small>
+          </article>
+          <article class="card">
+            <h3>Responsabilidad visible</h3>
+            <p>
+              Revisor, motivo, opción, fecha y siguiente paso interno. Historial
+              de cambios y rechazos.
+            </p>
+            <small>No hay aprobación implícita</small>
+          </article>
+        </div>
+        <div class="note">
+          El producto convierte un expediente en una decisión interna
+          verificable; no sustituye el juicio del fundador.
+        </div>
+        <div class="foot">
+          <span>Control operativo antes de conectar sistemas reales</span
+          ><span>02 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">TRES CASOS / UN MISMO MODELO</p>
+        <h2>
+          Preparado para los casos del sprint.<br /><span class="accent"
+            >Sin inventar actividad comercial.</span
+          >
+        </h2>
+        <div class="grid">
+          <article class="card">
+            <h3>UVA × BridgeLytic</h3>
+            <p>Applied AI pilot.</p>
+            <small
+              >Fixture: evaluación interna de un posible piloto, sin datos de
+              clientes ni conexión externa.</small
+            >
+          </article>
+          <article class="card">
+            <h3>X-Humanoid</h3>
+            <p>North America commercialization.</p>
+            <small
+              >Fixture: evaluación de supuestos; no contacto con prospectos ni
+              modificación de CRM.</small
+            >
+          </article>
+          <article class="card">
+            <h3>Booster Robotics</h3>
+            <p>University / commercialization pilots.</p>
+            <small
+              >Fixture: comparar alternativas de piloto; no acuerdos, compras ni
+              mensajes a universidades.</small
+            >
+          </article>
+        </div>
+        <p class="muted">
+          Fuentes: data/SEED_SOURCES.md. Los nombres reflejan el alcance;
+          señales, roles y contenido operativo son sintéticos. VERIFIED sólo se
+          refiere al fixture.
+        </p>
+        <div class="foot">
+          <span>Dataset sanitizado real pendiente de recepción</span
+          ><span>03 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">VERTICAL SLICE FUNCIONAL</p>
+        <h2>Un recorrido conectado,<br />no pantallas aisladas.</h2>
+        <div class="flow">
+          <span>Señal</span><b>→</b><span>Evidencia</span><b>→</b
+          ><span>Opciones</span><b>→</b><span>Propuesta</span><b>→</b
+          ><span>Decisión</span><b>→</b><span>Next action</span>
+        </div>
+        <div class="steps">
+          <b>01</b>
+          <p>Capturar fuente, procedencia, owner y confianza.</p>
+          <b>02</b>
+          <p>
+            Comparar alternativas y referenciar evidencia, hipótesis e
+            incógnitas.
+          </p>
+          <b>03</b>
+          <p>
+            Revisor confirma opción y motivo; se guardan aprobación y eventos.
+          </p>
+          <b>04</b>
+          <p>
+            Revisar el founder brief, simular seguimiento y comprobar el bloqueo
+            externo.
+          </p>
+        </div>
+        <p class="muted">
+          También se puede crear una oportunidad vacía desde la UI. El seed no
+          contiene decisiones preaprobadas.
+        </p>
+        <div class="foot">
+          <span
+            >La demo se realiza sobre el servidor local, no abriendo el HTML
+            directamente</span
+          ><span>04 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">PERMISOS Y LÍMITES</p>
+        <h2>
+          La propuesta no aprueba.<br /><span class="accent"
+            >Aprobar tampoco ejecuta.</span
+          >
+        </h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Lectura / editor / revisor</h3>
+            <p>
+              Tokens locales separados. El servidor resuelve identidad y
+              permiso. Un editor no puede aprobar.
+            </p>
+            <small>No son identidad corporativa ni SSO</small>
+          </article>
+          <article class="card">
+            <h3>Confirmación real</h3>
+            <p>
+              Opción válida, propuesta vigente, motivo y confirmación explícita.
+              La persona puede elegir otra alternativa.
+            </p>
+            <small>Expediente congelado durante el gate</small>
+          </article>
+          <article class="card">
+            <h3>Ejecución bloqueada</h3>
+            <p>
+              Email, CRM, outbound, compras y calendario desconectados. Todo
+              intento externo devuelve 403.
+            </p>
+            <small>Incluso después de APPROVED</small>
+          </article>
+        </div>
+        <div class="note">
+          El borrador asistido es un simulador determinista persistido: sin LLM,
+          red, herramientas ni autoridad sobre etapas o aprobaciones.
+        </div>
+        <div class="foot">
+          <span>Sandbox de control, no servicio productivo</span
+          ><span>05 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">RELIABILITY</p>
+        <h2>Demostrar el rechazo<br />es parte del producto.</h2>
+        <div class="grid two">
+          <article class="card">
+            <h3>Fallos controlados</h3>
+            <ul>
+              <li>Datos incompletos y confianza inválida.</li>
+              <li>Duplicados y referencias entre casos.</li>
+              <li>Saltos de etapa o decisión sin confirmar.</li>
+              <li>Editor que intenta aprobar.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Persistencia verificable</h3>
+            <ul>
+              <li>Cambio y auditoría en una transacción.</li>
+              <li>Fallo inyectado: rollback y reintento.</li>
+              <li>UPDATE / DELETE del historial bloqueados.</li>
+              <li>Recorrido probado en los tres casos.</li>
+            </ul>
+          </article>
+        </div>
+        <p><code>python -m unittest discover -v</code></p>
+        <p class="muted">
+          Prueba adicional de navegador: propuesta → decisión → simulación →
+          bloqueo → auditoría, con comprobación de ancho móvil. La matriz de
+          aceptación enlaza criterios y pruebas.
+        </p>
+        <div class="foot">
+          <span>La aceptación final y puntuación corresponden al evaluador</span
+          ><span>06 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">ARQUITECTURA</p>
+        <h2>Reglas separadas de transporte<br />y almacenamiento.</h2>
+        <div class="diagram">
+          <div class="card">
+            <h3>Web / HTTP</h3>
+            <small>Formularios, JSON, identidad y permisos</small>
+          </div>
+          <b>→</b>
+          <div class="card">
+            <h3>Aplicación</h3>
+            <small>Casos de uso, transacciones y auditoría</small>
+          </div>
+          <b>→</b>
+          <div class="card">
+            <h3>Dominio</h3>
+            <small>Entidades, etapas y validaciones puras</small>
+          </div>
+        </div>
+        <div class="grid two">
+          <div class="card">
+            <h3>Puerto → repositorio → SQLite</h3>
+            <p>
+              Persistencia intercambiable; el dominio no conoce SQL. Historial y
+              expediente se confirman juntos.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Borrador local → revisión</h3>
+            <p>
+              Salida no ejecutable. La API la guarda; no decide ni autoriza por
+              sí misma.
+            </p>
+          </div>
+        </div>
+        <p class="muted">
+          <a href="../docs/ARQUITECTURA.svg"
+            >Ver arquitectura completa de una página, con decisiones sí/no</a
+          >
+          · Biblioteca estándar de Python, SQLite y web sin build.
+        </p>
+        <div class="foot">
+          <span
+            >Auditoría append-only operativa; no garantía criptográfica frente
+            al administrador de la base</span
+          ><span>07 / 08</span>
+        </div>
+      </section>
+      <section class="slide">
+        <p class="kicker">HANDOFF Y SIGUIENTE GATE</p>
+        <h2>
+          Listo para revisar localmente.<br /><span class="accent"
+            >Dependencias explícitas.</span
+          >
+        </h2>
+        <div class="grid two">
+          <article class="card">
+            <h3>Incluido</h3>
+            <p>
+              Código modular, UI de flujo completo, seed, API, pruebas,
+              arquitectura, documentación y este deck.
+            </p>
+            <small
+              >Inicio: python -m opportunity_control --database
+              runtime/entrega.db</small
+            >
+          </article>
+          <article class="card">
+            <h3>Por confirmar / recibir</h3>
+            <p>
+              Repositorio y canal controlado, dataset sanitizado y expectativa
+              de IA de sandbox.
+            </p>
+            <small
+              >No se sustituyen datos faltantes por hechos inventados</small
+            >
+          </article>
+        </div>
+        <div class="note">
+          La revisión debe incluir una demo en vivo o video de 5–10 minutos de
+          esta versión. El deck acompaña la ejecución; no sustituye ese
+          entregable ni la aceptación de Jeff.
+        </div>
+        <p class="muted">
+          No se publicó ni conectó producción. Toda ampliación de acceso o
+          efecto externo requiere autorización escrita y controles adicionales.
+        </p>
+        <div class="foot">
+          <span
+            >BridgeLytic Opportunity Control Layer · entrega local para
+            evaluación</span
+          ><span>08 / 08</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
